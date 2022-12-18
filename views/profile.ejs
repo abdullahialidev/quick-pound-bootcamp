@@ -1,46 +1,68 @@
 <%- include('partials/header') -%>
-<div class="container">
-  <div class="row mt-5">
-      <div class="col-6">
-          <div>
-              <p><strong>User Name</strong>: <%= user.userName %></p>
-              <p><strong>Email</strong>: <%= user.email %></p>
-              <a href="/logout" class="col-3 btn btn-primary">Logout</a>
-          </div>
-          <div class="mt-5">
-            <h2>Add a post</h2>
-            <form action="/post/createPost" enctype="multipart/form-data" method="POST">
-              <div class="mb-3">
-                  <label for="title" class="form-label">Title</label>
-                  <input type="text" class="form-control" id="title" name="title">
+
+          <a href="/logout" class="col-3 btn btn-primary">Logout</a>
+         
+
+          <section class="mainSection">
+            <div>
+              <div class="whereOrder">
+                <h1> Orders to be Fulfilled</h1>
+                <p>Once order is fulfilled, click the button!</p>
               </div>
-              <div class="mb-3">
-                <label for="caption" class="form-label">Caption</label>
-                <textarea class="form-control" id="caption" name="caption"></textarea>
+              
+              <% if(pendingOrder.length == 0) {%>
+                <p class="whereOrder">There currently are no pending orders!</p>
+              <%} %>
+          
+              <ul>
+              <% for (let i = 0; i < pendingOrder.length; i++) {%>
+                <div class="OrderPending">
+                  <li>
+                    <span>Name: <%= pendingOrder[i].customerName%></span>
+                    <p>Order: <%= pendingOrder[i].size%> <%= pendingOrder[i].order%></p>
+                    <form
+                      class="col-1"
+                      action="/post/fulfillOrder/<%= pendingOrder[i].id %>?_method=PUT"
+                      method="POST"
+                      >
+                      <button class="btn btn-primary bi bi-check-circle" type="submit"></button>
+                    </form>
+                  </li>
+                </div>
+              <%}%>
+              </ul>
+          
+          
+          
+            </div>
+          </section>
+          
+          
+          <section class="mainSection">
+            <div >
+              <div class="whereOrder">
+                <h1>Order is fulfilled and ready for pick up!</h1>
+                <p>Delete order after pickup!</p>
+          
               </div>
-              <div class="mb-3">
-                <label for="imgUpload" class="form-label">Image</label>
-                <input type="file" class="form-control" id="imageUpload" name="file">
-              </div>
-              <button type="submit" class="btn btn-primary" value="Upload">Submit</button>
-            </form>
-          </div>
-      </div>
-      <div class="col-6">
-        <ul class="row list-unstyled">
-        <% for(var i=0; i<posts.length; i++) {%>
-          <li class="col-6 justify-content-between mt-5">
-            <a href="/post/<%= posts[i]._id%>">
-              <img class="img-fluid" src="<%= posts[i].image%>">
-            </a>
-          </li>
-        <% } %>
-        </ul>
-        <div class="row justify-content-center mt-5">
-          <a class="btn btn-primary" href="/feed">Return to Feed</a>
-        </div>  
-      </div>  
-    </div>
-  </div>
-</div>
+              <ul>
+              <% for (let i = 0; i < completedOrder.length; i++) {%>
+                <div class="OrderComplete">
+                  <li>
+                    <span><%= completedOrder[i].assignedBarista%> completed: <%= completedOrder[i].customerName%>'s order</span>
+                    <p>Order: <%= completedOrder[i].size%> <%= completedOrder[i].order%></p>
+                    <form
+                    action="/post/deleteOrder/<%= completedOrder[i].id %>?_method=DELETE" 
+                    method="POST"
+                    class="col-3"
+                  >
+                    <button class="btn btn-primary bi bi-trash" type="submit"></button>
+                  </form>
+                    
+                  </li>
+                </div>
+              <%}%>
+              </ul>
+            </div>
+          </section>
 <%- include('partials/footer') -%>

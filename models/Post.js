@@ -1,34 +1,31 @@
 const mongoose = require("mongoose");
 
 const PostSchema = new mongoose.Schema({
-  title: {
+
+  order: {
     type: String,
     required: true,
   },
-  image: {
-    type: String,
-    require: true,
-  },
-  cloudinaryId: {
-    type: String,
-    require: true,
-  },
-  caption: {
+  size: {
     type: String,
     required: true,
   },
-  likes: {
-    type: Number,
+  orderStatus: { 
+    type: String,
+    required: true,
+    default: 'pending'
+  },
+  customerName: { 
+    type: String,
     required: true,
   },
-  user: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "User",
-  },
-  createdAt: {
-    type: Date,
-    default: Date.now,
-  },
+  assignedBarista: { 
+    type: String,
+    required: true,
+    default: " " 
+  }
+
+  
 });
 
-module.exports = mongoose.model("Post", PostSchema);
+module.exports = mongoose.model("storebucks", PostSchema); 
